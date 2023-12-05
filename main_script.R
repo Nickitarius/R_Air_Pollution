@@ -50,5 +50,31 @@ getCompleteObservation("data", c(2, 4, 8, 10, 12))
 getCompleteObservation("data", 30:25)
 getCompleteObservation("data", 3)
 
+getCorrelation <- function(folder, limen = 0) {
+  res <- c()
+  list_file = list.files(folder, full.names = TRUE)
+  for (f in list_file){
+    file <- read.csv(f)
+    complete <- file[complete.cases(file),]
+    count <- dim(complete)[1]
+    if (count>=limen){
+      res <- c(res, cor(complete[, "sulfate"], complete[, "nitrate"]))
+    }
+  }
+  res <- res[!is.na(res)]
+}
 
+print("Testing function 3: ")
+res <- getCorrelation("data", 150)
+head(res)
+summary(res)
+res <- getCorrelation("data", 400)
+head(res)
+summary(res)
+res <- getCorrelation("data", 5000)
+summary(res)
+length(res)
+res <- getCorrelation("data")
+summary(res)
+length(res)
 
